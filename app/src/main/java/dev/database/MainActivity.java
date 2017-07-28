@@ -14,44 +14,33 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        try {
+        try
+        {
+            SQLiteDatabase eventsDB = this.openOrCreateDatabase("Events", MODE_PRIVATE, null);
 
-            
-            // Open or create DB if doesn't exist
-            SQLiteDatabase myDatabase = this.openOrCreateDatabase("Users", MODE_PRIVATE, null);
+            eventsDB.execSQL("CREATE TABLE IF NOT EXISTS events (event VARCHAR, year INT(4))");
 
-            // Create tables
-            myDatabase.execSQL("CREATE TABLE IF NOT EXISTS users (name VARCHAR, age INT(3))");
+            eventsDB.execSQL("INSERT INTO events (event, year) VALUES ('Edvarda dzimsanas gads', 1992)");
+            eventsDB.execSQL("INSERT INTO events (event, year) VALUES ('Masa aprecejas', 2017)");
 
-            // Insert data in tables
-            myDatabase.execSQL("INSERT INTO users (name, age) VALUES ('Rob', 34)");
-            myDatabase.execSQL("INSERT INTO users (name, age) VALUES ('Edvards', 24)");
+            Cursor c = eventsDB.rawQuery("SELECT * FROM events", null);
 
-            // Get data
-
-            // Cursor allows to loop through all of the results of particular query
-            Cursor c = myDatabase.rawQuery("SELECT * FROM users", null);
-
-
-            // Get colon indexes
-
-            int nameIndex = c.getColumnIndex("name");
-            int ageIndex = c.getColumnIndex("age");
+            int eventIndex = c.getColumnIndex("event");
+            int yearIndex = c.getColumnIndex("year");
 
             c.moveToFirst();
 
             while(c != null)
             {
-                Log.i("name", c.getString(nameIndex));
-                Log.i("age", Integer.toString(c.getInt(ageIndex)));
+                Log.i("event", c.getString(eventIndex));
+                Log.i("year", Integer.toString(c.getInt(yearIndex)));
 
                 c.moveToNext();
             }
-
         }
         catch (Exception e)
         {
-
+            e.printStackTrace();
         }
     }
 }
