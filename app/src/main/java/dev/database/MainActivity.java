@@ -16,24 +16,32 @@ public class MainActivity extends AppCompatActivity {
 
         try
         {
-            SQLiteDatabase eventsDB = this.openOrCreateDatabase("Events", MODE_PRIVATE, null);
+            SQLiteDatabase myDatabase = this.openOrCreateDatabase("Users", MODE_PRIVATE, null);
 
-            eventsDB.execSQL("CREATE TABLE IF NOT EXISTS events (event VARCHAR, year INT(4))");
+             myDatabase.execSQL("CREATE TABLE IF NOT EXISTS newUsers (name VARCHAR, age INT(3), id INTEGER PRIMARY KEY)");
 
-            eventsDB.execSQL("INSERT INTO events (event, year) VALUES ('Edvarda dzimsanas gads', 1992)");
-            eventsDB.execSQL("INSERT INTO events (event, year) VALUES ('Masa aprecejas', 2017)");
+//            myDatabase.execSQL("INSERT INTO newUsers (name, age) VALUES ('Andris', 42)");
+//            myDatabase.execSQL("INSERT INTO newUsers (name, age) VALUES ('Indra', 43)");
+//            myDatabase.execSQL("INSERT INTO newUsers (name, age) VALUES ('Ruta', 31)");
+//            myDatabase.execSQL("INSERT INTO newUsers (name, age) VALUES ('Raimonds', 43)");
 
-            Cursor c = eventsDB.rawQuery("SELECT * FROM events", null);
+//            myDatabase.execSQL("UPDATE users SET age = 2 WHERE name = 'Emīls'");
+//            myDatabase.execSQL("DELETE FROM users WHERE name = 'Edvards' LIMIT 2");
 
-            int eventIndex = c.getColumnIndex("event");
-            int yearIndex = c.getColumnIndex("year");
+            Cursor c = myDatabase.rawQuery("SELECT * FROM newUsers", null);
+
+
+            int nameIndex = c.getColumnIndex("name");
+            int ageIndex = c.getColumnIndex("age");
+            int idIndex = c.getColumnIndex("id");
 
             c.moveToFirst();
 
             while(c != null)
             {
-                Log.i("event", c.getString(eventIndex));
-                Log.i("year", Integer.toString(c.getInt(yearIndex)));
+                Log.i("UserResults - name", c.getString(nameIndex));
+                Log.i("UserResults - age", Integer.toString(c.getInt(ageIndex)));
+                Log.i("UserResults - id", Integer.toString(c.getInt(idIndex)));
 
                 c.moveToNext();
             }
